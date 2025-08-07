@@ -11,6 +11,9 @@ public class TargetLauncher : MonoBehaviour
         Right
     }
 
+    [Header("キー設定")]
+    public KeyCode triggerKey = KeyCode.Space;
+
     [Header("発射設定")]
     public LaunchDirection direction = LaunchDirection.Up;
     public GameObject targetPrefab;
@@ -37,12 +40,9 @@ public class TargetLauncher : MonoBehaviour
         }
     }
 
-
-
-
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isLaunching)
+        if (Input.GetKeyDown(triggerKey) && !isLaunching)
         {
             StartCoroutine(LaunchTargets());
         }
@@ -75,42 +75,38 @@ public class TargetLauncher : MonoBehaviour
         Animator animator = target.GetComponent<Animator>();
         if (animator != null)
         {
-            Debug.Log("Animator found on target. Direction = " + direction);
-
             switch (direction)
             {
                 case LaunchDirection.Up:
                     animator.runtimeAnimatorController = animUp;
-                    Debug.Log("animUp controller assigned");
                     break;
                 case LaunchDirection.Down:
                     animator.runtimeAnimatorController = animDown;
-                    Debug.Log("animDown controller assigned");
                     break;
                 case LaunchDirection.Left:
                     animator.runtimeAnimatorController = animLeft;
-                    Debug.Log("animLeft controller assigned");
                     break;
                 case LaunchDirection.Right:
                     animator.runtimeAnimatorController = animRight;
-                    Debug.Log("animRight controller assigned");
                     break;
             }
         }
-        else
+
+        // 発射方向のベクトルを取得
+        Vector3 forceDir = Vector3.up;
+        switch (direction)
         {
-            Debug.LogWarning("Animator component not found on the instantiated target.");
+            case LaunchDirection.Up: forceDir = Vector3.up; break;
+            case LaunchDirection.Down: forceDir = Vector3.down; break;
+            case LaunchDirection.Left: forceDir = Vector3.left; break;
+            case LaunchDirection.Right: forceDir = Vector3.right; break;
         }
 
-        // 発射方向に力を加える
+        // Rigidbody に力を加える
         Rigidbody rb = target.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.AddForce(launchPoint.forward * launchForce, ForceMode.Impulse);
-        }
-        else
-        {
-            Debug.LogWarning("Rigidbody not found on the instantiated target.");
+            rb.AddForce(forceDir * launchForce, ForceMode.Impulse);
         }
     }
 }
