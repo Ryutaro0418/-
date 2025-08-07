@@ -29,6 +29,17 @@ public class TargetLauncher : MonoBehaviour
 
     private bool isLaunching = false;
 
+    public void StartLaunching()
+    {
+        if (!isLaunching)
+        {
+            StartCoroutine(LaunchTargets());
+        }
+    }
+
+
+
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !isLaunching)

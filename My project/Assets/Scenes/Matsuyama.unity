@@ -317,7 +317,7 @@ MonoBehaviour:
   launchForce: 50
   launchCount: 15
   launchInterval: 3
-  animUp: {fileID: 22100000, guid: 99d74e7d38a517e4ea3991f0f54f6c5d, type: 2}
+  animUp: {fileID: 22100000, guid: 7fefa1f62c34c1b49a5c3425033d5bb8, type: 2}
   animDown: {fileID: 0}
   animLeft: {fileID: 0}
   animRight: {fileID: 0}
@@ -335,6 +335,54 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2046509855}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &600970218
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 600970220}
+  - component: {fileID: 600970219}
+  m_Layer: 0
+  m_Name: Launcher_Manegaer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &600970219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600970218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef85e59d5ea8c84785620bbef584cc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  launchers:
+  - {fileID: 1505585912}
+  - {fileID: 176985327}
+  - {fileID: 522227507}
+--- !u!4 &600970220
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600970218}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.12964392, y: -0.532003, z: 25.174534}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1000952173
@@ -1052,7 +1100,7 @@ MonoBehaviour:
   launchForce: 50
   launchCount: 15
   launchInterval: 4
-  animUp: {fileID: 22100000, guid: 99d74e7d38a517e4ea3991f0f54f6c5d, type: 2}
+  animUp: {fileID: 22100000, guid: 8e11f6534c3662b4b9ea5a2b84404efe, type: 2}
   animDown: {fileID: 0}
   animLeft: {fileID: 0}
   animRight: {fileID: 0}
@@ -1561,3 +1609,4 @@ SceneRoots:
   - {fileID: 1505585913}
   - {fileID: 176985328}
   - {fileID: 522227508}
+  - {fileID: 600970220}
