@@ -1,40 +1,105 @@
+Ôªøusing UnityEngine;
 using System.Collections;
-using UnityEngine;
 
 public class TargetLauncher : MonoBehaviour
 {
-    [Header("É^Å[ÉQÉbÉgÇÃê›íË")]
-    public GameObject targetPrefab;         // î≠éÀÇ∑ÇÈÉ^Å[ÉQÉbÉgÇÃÉvÉåÉnÉu
-    public Transform launchPoint;           // î≠éÀà íu
+    public enum LaunchDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
 
-    [Header("î≠éÀê›íË")]
-    public int numberOfTargets = 15;        // î≠éÀÇ∑ÇÈêî
-    public float launchInterval = 1f;       // äeî≠éÀÇÃä‘äuÅiïbÅj
-    public float launchForce = 50f;         // íeÇ…â¡Ç¶ÇÈóÕ
+    [Header("Áô∫Â∞ÑË®≠ÂÆö")]
+    public LaunchDirection direction = LaunchDirection.Up;
+    public GameObject targetPrefab;
+    public Transform launchPoint;
+    public float launchForce = 10f;
 
-    private bool hasLaunched = false;
+    [Header("ÈÄ£Á∂öÁô∫Â∞ÑË®≠ÂÆö")]
+    public int launchCount = 15;
+    public float launchInterval = 3f;
+
+    [Header("„Ç¢„Éã„É°„Éº„Ç∑„Éß„É≥Ë®≠ÂÆö")]
+    public AnimatorOverrideController animUp;
+    public AnimatorOverrideController animDown;
+    public AnimatorOverrideController animLeft;
+    public AnimatorOverrideController animRight;
+
+    private bool isLaunching = false;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !hasLaunched)
+        if (Input.GetKeyDown(KeyCode.Space) && !isLaunching)
         {
-            hasLaunched = true;
             StartCoroutine(LaunchTargets());
         }
     }
 
     IEnumerator LaunchTargets()
     {
-        for (int i = 0; i < numberOfTargets; i++)
-        {
-            GameObject target = Instantiate(targetPrefab, launchPoint.position, launchPoint.rotation);
-            Rigidbody rb = target.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddForce(launchPoint.forward * launchForce, ForceMode.Impulse);
-            }
+        isLaunching = true;
 
+        for (int i = 0; i < launchCount; i++)
+        {
+            Launch();
             yield return new WaitForSeconds(launchInterval);
+        }
+
+        isLaunching = false;
+    }
+
+    void Launch()
+    {
+        if (targetPrefab == null || launchPoint == null)
+        {
+            Debug.LogWarning("Prefab „Åæ„Åü„ÅØ LaunchPoint „ÅåË®≠ÂÆö„Åï„Çå„Å¶„ÅÑ„Åæ„Åõ„Çì„ÄÇ");
+            return;
+        }
+
+        GameObject target = Instantiate(targetPrefab, launchPoint.position, launchPoint.rotation);
+
+        // Animator „ÅÆÂèñÂæó„Å®„Ç¢„Éã„É°„Éº„Ç∑„Éß„É≥„Ç≥„É≥„Éà„É≠„Éº„É©„Éº„ÅÆÂâ≤„ÇäÂΩì„Å¶
+        Animator animator = target.GetComponent<Animator>();
+        if (animator != null)
+        {
+            Debug.Log("Animator found on target. Direction = " + direction);
+
+            switch (direction)
+            {
+                case LaunchDirection.Up:
+                    animator.runtimeAnimatorController = animUp;
+                    Debug.Log("animUp controller assigned");
+                    break;
+                case LaunchDirection.Down:
+                    animator.runtimeAnimatorController = animDown;
+                    Debug.Log("animDown controller assigned");
+                    break;
+                case LaunchDirection.Left:
+                    animator.runtimeAnimatorController = animLeft;
+                    Debug.Log("animLeft controller assigned");
+                    break;
+                case LaunchDirection.Right:
+                    animator.runtimeAnimatorController = animRight;
+                    Debug.Log("animRight controller assigned");
+                    break;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Animator component not found on the instantiated target.");
+        }
+
+        // Áô∫Â∞ÑÊñπÂêë„Å´Âäõ„ÇíÂä†„Åà„Çã
+        Rigidbody rb = target.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(launchPoint.forward * launchForce, ForceMode.Impulse);
+        }
+        else
+        {
+            Debug.LogWarning("Rigidbody not found on the instantiated target.");
         }
     }
 }
