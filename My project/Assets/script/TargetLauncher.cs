@@ -17,7 +17,11 @@ public class TargetLauncher : MonoBehaviour
     [Header("発射設定")]
     public LaunchDirection direction = LaunchDirection.Up;
     public GameObject targetPrefab;
+
+    // 発射位置をInspectorで設定できるようにpublicにする
+    [Header("発射位置 (Inspectorで設定)")]
     public Transform launchPoint;
+
     public float launchForce = 10f;
 
     [Header("連続発射設定")]
@@ -32,11 +36,11 @@ public class TargetLauncher : MonoBehaviour
 
     private bool isLaunching = false;
 
-    public void StartLaunching()
+    void Awake()
     {
-        if (!isLaunching)
+        if (launchPoint == null)
         {
-            StartCoroutine(LaunchTargets());
+            Debug.LogWarning("LaunchPoint が Inspector で設定されていません！");
         }
     }
 
@@ -63,15 +67,22 @@ public class TargetLauncher : MonoBehaviour
 
     void Launch()
     {
-        if (targetPrefab == null || launchPoint == null)
+        if (targetPrefab == null)
         {
-            Debug.LogWarning("Prefab または LaunchPoint が設定されていません。");
+            Debug.LogWarning("targetPrefab が設定されていません。");
             return;
         }
 
+        if (launchPoint == null)
+        {
+            Debug.LogWarning("launchPoint が設定されていません。");
+            return;
+        }
+
+        // 指定されたlaunchPointの位置と回転で生成
         GameObject target = Instantiate(targetPrefab, launchPoint.position, launchPoint.rotation);
 
-        // Animator の取得とアニメーションコントローラーの割り当て
+        // Animatorの設定
         Animator animator = target.GetComponent<Animator>();
         if (animator != null)
         {
@@ -92,7 +103,7 @@ public class TargetLauncher : MonoBehaviour
             }
         }
 
-        // 発射方向のベクトルを取得
+        // 発射方向ベクトルを決定
         Vector3 forceDir = Vector3.up;
         switch (direction)
         {
@@ -102,7 +113,7 @@ public class TargetLauncher : MonoBehaviour
             case LaunchDirection.Right: forceDir = Vector3.right; break;
         }
 
-        // Rigidbody に力を加える
+        // Rigidbodyに力を加える
         Rigidbody rb = target.GetComponent<Rigidbody>();
         if (rb != null)
         {

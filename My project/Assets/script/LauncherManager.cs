@@ -10,7 +10,7 @@ public class LauncherManager : MonoBehaviour
         {
             foreach (var launcher in launchers)
             {
-                launcher.StartLaunching(); // © ’Ç‰Á‚ÅŒÄ‚×‚é‚æ‚¤‚É‚·‚é
+                //launcher.StartLaunching(); // © ’Ç‰Á‚ÅŒÄ‚×‚é‚æ‚¤‚É‚·‚é
             }
         }
     }
